@@ -422,7 +422,7 @@ def main() -> int:
             logger.error(f"获取推荐失败: {e}")
             time.sleep(5)
 
-    stock_codes = [item['股票代码'] for item in recommendations][:5]
+    stock_codes = [item['股票代码'] for item in recommendations][:20]
     
     # === 启动 WebUI (如果启用) ===
     # 优先级: 命令行参数 > 配置文件

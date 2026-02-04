@@ -40,6 +40,7 @@ import logging
 import sys
 import time
 import uuid
+import httpx
 from datetime import datetime, timezone, timedelta
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
@@ -300,7 +301,10 @@ def run_full_analysis(
             dashboard_content = pipeline.notifier.generate_dashboard_report(results)
             full_content += f"# 🚀 个股决策仪表盘\n\n{dashboard_content}"
 
-        print(full_content)
+        # print(full_content)
+
+        upload_recommendation_analysis(full_content)
+
         
     except Exception as e:
         logger.exception(f"分析流程执行失败: {e}")
@@ -339,7 +343,6 @@ def start_bot_stream_clients(config: Config) -> None:
             logger.error(f"[Main] Failed to start Feishu Stream client: {exc}")
 
 def get_recommendations():
-    import httpx
     recommendations = []
     url = 'https://stock.ai.hamuna.club/stocks/recommendations'
     with httpx.Client() as client:
@@ -352,6 +355,31 @@ def get_recommendations():
             recommendations = response['data']['recommendations']
         
     return recommendations
+
+def upload_recommendation_analysis(content):
+    logger.info('uploading recommendation analysis...')
+    url = 'http://localhost:8080/recommendations/analysis'
+    date = datetime.now()
+    with httpx.Client() as client:
+        for i in range(3):
+            try:
+                response = client.post(url, json={
+                    'date': date.date().strftime('%Y-%m-%d'),
+                    'time': date.time().strftime('%H:%M'),
+                    'summary': content[:10] + '...',
+                    'content': content
+                })
+                response.raise_for_status()
+                response = response.json()
+                if response['success'] == 'ok':
+                    logger.info(f"推荐分析上传成功")
+                    break
+                else:
+                    logger.error(f"推荐分析上传失败: {response['msg']}")
+                    time.sleep(5)
+            except Exception as e:
+                logger.error(f"推荐分析上传失败: {e}")
+                time.sleep(5)
 
 def main() -> int:
     """
@@ -394,7 +422,7 @@ def main() -> int:
             logger.error(f"获取推荐失败: {e}")
             time.sleep(5)
 
-    stock_codes = [item['股票代码'] for item in recommendations]
+    stock_codes = [item['股票代码'] for item in recommendations][:5]
     
     # === 启动 WebUI (如果启用) ===
     # 优先级: 命令行参数 > 配置文件

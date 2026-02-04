@@ -44,7 +44,6 @@ from datetime import datetime, timezone, timedelta
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import List, Optional
-from src.feishu_doc import FeishuDocManager
 
 from src.config import get_config, Config
 from src.notification import NotificationService
@@ -284,39 +283,24 @@ def run_full_analysis(
         
         logger.info("\n任务执行完成")
 
-        # === 新增：生成飞书云文档 ===
-        try:
-            feishu_doc = FeishuDocManager()
-            if feishu_doc.is_configured() and (results or market_report):
-                logger.info("正在创建飞书云文档...")
+        # 1. 准备标题 "01-01 13:01大盘复盘"
+        tz_cn = timezone(timedelta(hours=8))
+        now = datetime.now(tz_cn)
+        doc_title = f"{now.strftime('%Y-%m-%d %H:%M')} 大盘复盘"
 
-                # 1. 准备标题 "01-01 13:01大盘复盘"
-                tz_cn = timezone(timedelta(hours=8))
-                now = datetime.now(tz_cn)
-                doc_title = f"{now.strftime('%Y-%m-%d %H:%M')} 大盘复盘"
+        # 2. 准备内容 (拼接个股分析和大盘复盘)
+        full_content = ""
 
-                # 2. 准备内容 (拼接个股分析和大盘复盘)
-                full_content = ""
+        # 添加大盘复盘内容（如果有）
+        if market_report:
+            full_content += f"# 📈 大盘复盘\n\n{market_report}\n\n---\n\n"
 
-                # 添加大盘复盘内容（如果有）
-                if market_report:
-                    full_content += f"# 📈 大盘复盘\n\n{market_report}\n\n---\n\n"
+        # 添加个股决策仪表盘（使用 NotificationService 生成）
+        if results:
+            dashboard_content = pipeline.notifier.generate_dashboard_report(results)
+            full_content += f"# 🚀 个股决策仪表盘\n\n{dashboard_content}"
 
-                # 添加个股决策仪表盘（使用 NotificationService 生成）
-                if results:
-                    dashboard_content = pipeline.notifier.generate_dashboard_report(results)
-                    full_content += f"# 🚀 个股决策仪表盘\n\n{dashboard_content}"
-
-                # 3. 创建文档
-                doc_url = feishu_doc.create_daily_doc(doc_title, full_content)
-                if doc_url:
-                    logger.info(f"飞书云文档创建成功: {doc_url}")
-                    # 可选：将文档链接也推送到群里
-                    if not args.no_notify:
-                        pipeline.notifier.send(f"[{now.strftime('%Y-%m-%d %H:%M')}] 复盘文档创建成功: {doc_url}")
-
-        except Exception as e:
-            logger.error(f"飞书文档生成失败: {e}")
+        print(full_content)
         
     except Exception as e:
         logger.exception(f"分析流程执行失败: {e}")
@@ -354,6 +338,20 @@ def start_bot_stream_clients(config: Config) -> None:
         except Exception as exc:
             logger.error(f"[Main] Failed to start Feishu Stream client: {exc}")
 
+def get_recommendations():
+    import httpx
+    recommendations = []
+    url = 'https://stock.ai.hamuna.club/stocks/recommendations'
+    with httpx.Client() as client:
+        response = client.post(url, json={
+            'date': datetime.now().strftime('%Y-%m-%d')
+        })
+        response.raise_for_status()
+        response = response.json()
+        if response['success'] == 'ok':
+            recommendations = response['data']['recommendations']
+        
+    return recommendations
 
 def main() -> int:
     """
@@ -382,10 +380,21 @@ def main() -> int:
         logger.warning(warning)
     
     # 解析股票列表
-    stock_codes = None
-    if args.stocks:
-        stock_codes = [code.strip() for code in args.stocks.split(',') if code.strip()]
-        logger.info(f"使用命令行指定的股票列表: {stock_codes}")
+    # stock_codes = None
+    # if args.stocks:
+    #     stock_codes = [code.strip() for code in args.stocks.split(',') if code.strip()]
+    #     logger.info(f"使用命令行指定的股票列表: {stock_codes}")
+    for _ in range(3):
+        try:
+            recommendations = get_recommendations()
+            if recommendations:
+                logger.info(f"获取到 {len(recommendations)} 条推荐")
+                break
+        except Exception as e:
+            logger.error(f"获取推荐失败: {e}")
+            time.sleep(5)
+
+    stock_codes = [item['股票代码'] for item in recommendations]
     
     # === 启动 WebUI (如果启用) ===
     # 优先级: 命令行参数 > 配置文件

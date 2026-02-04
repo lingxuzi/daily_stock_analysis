@@ -358,7 +358,7 @@ def get_recommendations():
 
 def upload_recommendation_analysis(content):
     logger.info('uploading recommendation analysis...')
-    url = 'http://localhost:8080/recommendations/analysis'
+    url = 'https://stock.ai.hamuna.club/recommendations/analysis'
     date = datetime.now()
     with httpx.Client() as client:
         for i in range(3):

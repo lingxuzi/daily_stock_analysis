@@ -13,6 +13,7 @@ A股自选股智能分析系统 - 核心分析流水线
 
 import logging
 import time
+import random
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 from typing import List, Dict, Any, Optional, Tuple
@@ -521,6 +522,7 @@ class StockAnalysisPipeline:
         logger.info(f"========== 开始处理 {code} ==========")
         
         try:
+            time.sleep(random.uniform(1, 3))
             # Step 1: 获取并保存数据
             success, error = self.fetch_and_save_stock_data(code)
             

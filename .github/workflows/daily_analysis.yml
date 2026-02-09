@@ -1,17 +1,13 @@
 name: 每日股票分析
 
 on:
-  # 定时触发 - 每天北京时间 18:00 (UTC 10:00)
-  schedule:
-    - cron: '0 14 * * 1-5'     # 周一到周五，UTC 10:00 = 北京时间 18:00
-  
   # 手动触发
   workflow_dispatch:
     inputs:
       mode:
         description: '运行模式'
-        required: true
-        default: 'full'
+        required: false
+        default: 'stocks-only'
         type: choice
         options:
           - full          # 完整分析（股票+大盘）
@@ -30,6 +26,10 @@ jobs:
     timeout-minutes: 30
     
     steps:
+      - name: set beijing timezone
+        uses: szenius/set-timezone@v2.0 # 设置虚拟环境的时区，可更改时区
+        with:
+          timezoneLinux: "Asia/Shanghai"
       - name: 检出代码
         uses: actions/checkout@v4
       

@@ -348,11 +348,9 @@ def start_bot_stream_clients(config: Config) -> None:
 
 def get_recommendations():
     recommendations = []
-    url = 'https://stock.ai.hamuna.club/stocks/recommendations'
+    url = 'https://stock.ai.hamuna.club/stocks/recommendations/latest'
     with httpx.Client() as client:
-        response = client.post(url, json={
-            'date': datetime.now().strftime('%Y-%m-%d')
-        })
+        response = client.post(url, json={})
         response.raise_for_status()
         response = response.json()
         if response['success'] == 'ok':

@@ -220,7 +220,8 @@ def parse_arguments() -> argparse.Namespace:
 def run_full_analysis(
     config: Config,
     args: argparse.Namespace,
-    stock_codes: Optional[List[str]] = None
+    stock_codes: Optional[List[str]] = None,
+    date_ = None
 ):
     """
     执行完整的分析流程（个股 + 大盘复盘）
@@ -307,7 +308,7 @@ def run_full_analysis(
 
         # print(full_content)
 
-        upload_recommendation_analysis(full_content)
+        upload_recommendation_analysis(full_content, date_)
 
         
     except Exception as e:
@@ -355,10 +356,10 @@ def get_recommendations():
         response = response.json()
         if response['success'] == 'ok':
             recommendations = response['data']['recommendations']
-        
-    return recommendations
+            date = response['data']['date']
+    return recommendations, date
 
-def upload_recommendation_analysis(content):
+def upload_recommendation_analysis(content, date_):
     logger.info('uploading recommendation analysis...')
     url = 'https://stock.ai.hamuna.club/recommendations/analysis'
     date = datetime.now()
@@ -366,7 +367,7 @@ def upload_recommendation_analysis(content):
         for i in range(3):
             try:
                 response = client.post(url, json={
-                    'date': date.date().strftime('%Y-%m-%d'),
+                    'date': date.date().strftime('%Y-%m-%d') if not date_ else date_,
                     'time': date.time().strftime('%H:%M'),
                     'summary': content[:20] + '...',
                     'content': content
@@ -416,7 +417,7 @@ def main() -> int:
     #     logger.info(f"使用命令行指定的股票列表: {stock_codes}")
     for _ in range(3):
         try:
-            recommendations = get_recommendations()
+            recommendations, date_ = get_recommendations()
             if recommendations:
                 logger.info(f"获取到 {len(recommendations)} 条推荐")
                 break
@@ -502,7 +503,7 @@ def main() -> int:
             return 0
         
         # 模式3: 正常单次运行
-        run_full_analysis(config, args, stock_codes)
+        run_full_analysis(config, args, stock_codes, date_)
         
         logger.info("\n程序执行完成")
         

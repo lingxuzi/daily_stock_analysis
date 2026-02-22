@@ -1,4 +1,4 @@
-name: QuantAgent
+name: 每日股票分析
 
 on:
   # 手动触发
@@ -81,8 +81,7 @@ jobs:
           echo "📋 配置检查"
           echo "=========================================="
           echo "【AI 配置】"
-          echo "  Gemini API Key: $([ -n "$GEMINI_API_KEY" ] && echo '✅ 已配置' || echo '❌ 未配置')"
-          echo "  OpenAI API Key: $([ -n "$OPENAI_API_KEY" ] && echo '✅ 已配置' || echo '⚪ 未配置')"
+          echo "  API Key: $([ -n "$API_KEY" ] && echo '✅ 已配置' || echo '❌ 未配置')"
           echo "=========================================="
           echo ""
 

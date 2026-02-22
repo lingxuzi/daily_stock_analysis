@@ -105,6 +105,7 @@ if __name__ == "__main__":
         results = analyzer.analyze_asset(
             code,
             start_date, end_date, "d")
+        print(results)
         full_content += create_stock_dashboard(code, code_name, results['full_results'])
         full_content += "\n\n---\n\n"   
         time.sleep(0.3)

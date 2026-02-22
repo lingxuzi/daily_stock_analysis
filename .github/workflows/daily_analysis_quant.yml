@@ -57,15 +57,15 @@ jobs:
           # AI 配置
           # ==========================================
           # Gemini AI（主选）
-          API_KEY: [${{ secrets.GEMINI_API_KEY }}]
-          AGENT_LLM_PROVIDER=google
-          AGENT_LLM_MODEL=gemini-2.5-flash
-          AGENT_LLM_TEMPERATURE=0.0
-          AGENT_LLM_BASE_URL=https://open.bigmodel.cn/api/paas/v4
-          GRAPH_LLM_PROVIDER=google
-          GRAPH_LLM_MODEL=gemini-2.5-flash
-          GRAPH_LLM_TEMPERATURE=0.0
-          GRAPH_LLM_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+          API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AGENT_LLM_PROVIDER: 'google'
+          AGENT_LLM_MODEL: 'gemini-2.5-flash'
+          AGENT_LLM_TEMPERATURE: 0.0
+          AGENT_LLM_BASE_URL: 'https://open.bigmodel.cn/api/paas/v4'
+          GRAPH_LLM_PROVIDER: 'google'
+          GRAPH_LLM_MODEL: 'gemini-2.5-flash'
+          GRAPH_LLM_TEMPERATURE: 0.0
+          GRAPH_LLM_BASE_URL: 'https://open.bigmodel.cn/api/paas/v4'
           
           
         run: |

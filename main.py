@@ -59,7 +59,7 @@ def load_config():
         'graph_llm_model': os.getenv('GRAPH_LLM_MODEL'),
         'graph_llm_temperature': float(os.getenv('GRAPH_LLM_TEMPERATURE')),
         'graph_llm_base_url': os.getenv('GRAPH_LLM_BASE_URL'),
-        'api_key': json.loads(os.getenv('API_KEY', '[]')),
+        'api_key': os.getenv('API_KEY', '').split(',')
     }
     return config
 

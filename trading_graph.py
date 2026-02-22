@@ -163,6 +163,7 @@ class TradingGraph:
                 base_url=base_url,
                 temperature=temperature,
                 api_key=api_key,
+                max_retries=4
             )
         elif provider == "anthropic":
             # ChatAnthropic handles SystemMessage extraction automatically
@@ -172,6 +173,7 @@ class TradingGraph:
                 model=model,
                 temperature=temperature,
                 api_key=api_key,
+                max_retries=4
             )
         elif provider == "qwen":
             return ChatQwen(
@@ -184,7 +186,8 @@ class TradingGraph:
             return ChatGoogleGenerativeAI(
                 model=model,
                 temperature=temperature,
-                api_key=api_key
+                api_key=api_key,
+                max_retries=4
             )
         else:
             raise ValueError(f"Unsupported provider: {provider}. Must be 'openai', 'anthropic', or 'qwen'")

@@ -64,17 +64,39 @@ def load_config():
     print(config)
     return config
 
+def upload(file):
+    with httpx.Client() as client:
+        with open(file, "rb") as f:
+            files = {"file": f}
+            response = client.post("https://img.remit.ee/api/upload", files=files, headers={
+                'Origin': 'https://img.remit.ee',
+                'referer': 'https://img.remit.ee'
+            }, timeout=60)
+            response.raise_for_status()
+            data = response.json()
+            if data["success"]:
+                return 'https://img.remit.ee' + data["url"]
+            else:
+                return None
+
 def create_stock_dashboard(stock_code, stock_name, stock_analysis_results):
     decision_map = {
         'SHORT': '看空',
         'LONG': '看多',
     }
+    pattern_image_url = upload('kline_chart.png')
+    if not pattern_image_url:
+        pattern_image_url = 'data:image/png;base64,' + stock_analysis_results["pattern_chart"]
+    
+    trend_image_url = upload('trend_graph.png')
+    if not trend_image_url:
+        trend_image_url = 'data:image/png;base64,' + stock_analysis_results["trend_chart"]
     dashboard_content = f'## 分析结果 -> {stock_code} {stock_name}\n\n'
     dashboard_content += f"### 📌 核心结论: {decision_map.get(stock_analysis_results['final_decision']['decision'], '未知')}\n\n"
     dashboard_content += f'**技术指标分析**: {stock_analysis_results["technical_indicators"]}\n\n'
-    dashboard_content += f'![image](data:image/png;base64,{stock_analysis_results["pattern_chart"]})\n\n'
+    dashboard_content += f'![image]({pattern_image_url})\n\n'
     dashboard_content += f'**K线形态分析**: {stock_analysis_results["pattern_analysis"]}\n\n'
-    dashboard_content += f'![image](data:image/png;base64,{stock_analysis_results["trend_chart"]})\n\n'
+    dashboard_content += f'![image]({trend_image_url})\n\n'
     dashboard_content += f'**趋势分析**: {stock_analysis_results["trend_analysis"]}\n\n'
     dashboard_content += f'**决策理由**: {stock_analysis_results["final_decision"]["justification"]}\n\n'
 
@@ -95,7 +117,7 @@ if __name__ == "__main__":
             logger.error(f"获取推荐失败: {e}")
             time.sleep(5)
 
-    stock_codes = [(item['股票代码'], item['股票名称']) for item in recommendations][:10]
+    stock_codes = [(item['股票代码'], item['股票名称']) for item in recommendations][:20]
 
     
     full_content = f"# 🎯 {date_} 决策仪表盘\n\n"

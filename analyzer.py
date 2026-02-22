@@ -199,7 +199,9 @@ class WebTradingAnalyzer:
                 "time_frame": display_timeframe,
                 "stock_name": asset_name,
                 "pattern_image": p_image["pattern_image"],
+                "pattern_image_path": p_image["pattern_image_path"],
                 "trend_image": t_image["trend_image"],
+                "trend_image_path": t_image["trend_image_path"],
             }
 
             # Run the trading graph

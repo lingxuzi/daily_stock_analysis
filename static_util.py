@@ -71,6 +71,7 @@ def generate_kline_image(kline_data) -> dict:
 
     return {
         "pattern_image": img_b64,
+        "pattern_image_path": "kline_chart.png",
         "pattern_image_description": "Candlestick chart saved locally and returned as base64 string.",
     }
 
@@ -159,5 +160,6 @@ def generate_trend_image(kline_data) -> dict:
 
     return {
         "trend_image": img_b64,
+        "trend_image_path": "trend_graph.png",
         "trend_image_description": "Trend-enhanced candlestick chart with support/resistance lines.",
     }

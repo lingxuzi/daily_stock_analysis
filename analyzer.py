@@ -7,6 +7,7 @@ from typing import Dict, Any
 from datetime import datetime
 import urllib
 import static_util
+import traceback
 
 class WebTradingAnalyzer:
     def __init__(self, config):
@@ -213,7 +214,7 @@ class WebTradingAnalyzer:
             }
 
         except Exception as e:
-            error_msg = str(e)
+            error_msg = traceback.format_exc()
             
             # Get current provider from config
             provider = self.config.get("agent_llm_provider", "openai")

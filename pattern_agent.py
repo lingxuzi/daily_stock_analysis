@@ -131,7 +131,7 @@ def create_pattern_agent(tool_llm, graph_llm, toolkit):
                         f"{pattern_text}\n\n"
                         "Determine whether the chart matches any of the patterns listed. "
                         "Clearly name the matched pattern(s), and explain your reasoning based on structure, trend, and symmetry."
-                        "Must answer in chinese"
+                        "**语言规范**: 要求以中文输出"
                     ),
                 },
                 {

@@ -68,12 +68,14 @@ def create_final_trade_decider(llm):
             - Do not guess direction — choose the **more defensible** side.
             6. Suggest a reasonable **risk-reward ratio** between **1.2 and 1.8**, based on current volatility and trend strength.
 
+
+            **语言规范**: justification 要求以中文输出
+
             ---
-            ### 🧠 Output Format in json(for system parsing), Must answer in chinese:
+            ### 🧠 Output Format in json(for system parsing)
 
             ```
             {{
-            "forecast_horizon": "Predicting next 3 candlestick (15 minutes, 1 hour, etc.)",
             "decision": "<Long or Short>",
             "justification": "<Concise, confirmed reasoning based on reports>",
             "risk_reward_ratio": "<float between 1.2 and 1.8>",

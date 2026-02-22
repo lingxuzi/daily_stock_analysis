@@ -58,6 +58,7 @@ def create_indicator_agent(llm, toolkit):
             Here is the computed indicator data:
             {report_content}
             You must interpret this data quickly and accurately.
+            **语言规范**: 要求以中文输出
         """
         response = llm.invoke(prompt)
 

@@ -107,7 +107,7 @@ def create_trend_agent(tool_llm, graph_llm, toolkit):
                         "Analyze how price interacts with these lines — are candles bouncing off, breaking through, or compressing between them?\n\n"
                         "Based on trendline slope, spacing, and recent K-line behavior, predict the likely short-term trend: **upward**, **downward**, or **sideways**. "
                         "Support your prediction with respect to prediction, reasoning, signals."
-                        "Answer in chinese"
+                        "**语言规范**: 要求以中文输出"
                     ),
                 },
                 {

@@ -11,7 +11,7 @@ from langchain_anthropic import ChatAnthropic
 from langchain_core.language_models import BaseChatModel
 from langchain_openai import ChatOpenAI
 from langchain_qwq import ChatQwen
-from langchain_google_genai import GoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langgraph.prebuilt import ToolNode
 
 from default_config import DEFAULT_CONFIG
@@ -181,7 +181,7 @@ class TradingGraph:
                 max_retries=4,
             )
         elif provider == "google":
-            return GoogleGenerativeAI(
+            return ChatGoogleGenerativeAI(
                 model=model,
                 temperature=temperature,
                 api_key=api_key

@@ -61,6 +61,7 @@ def load_config():
         'graph_llm_base_url': os.getenv('GRAPH_LLM_BASE_URL'),
         'api_key': os.getenv('API_KEY', '').split(',')
     }
+    print(config)
     return config
 
 def create_stock_dashboard(stock_code, stock_name, stock_analysis_results):

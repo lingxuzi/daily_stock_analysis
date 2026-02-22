@@ -101,12 +101,13 @@ if __name__ == "__main__":
     full_content = f"# 🎯 {date_} 决策仪表盘\n\n"
     end_date = datetime.now().date().strftime('%Y-%m-%d')
     start_date = (datetime.now().date() - timedelta(days=100)).strftime('%Y-%m-%d')
-    for (code, code_name) in stock_codes:
+    for i, (code, code_name) in enumerate(stock_codes):
         results = analyzer.analyze_asset(
             code,
             start_date, end_date, "d")
-        print(results)
         full_content += create_stock_dashboard(code, code_name, results['full_results'])
         full_content += "\n\n---\n\n"   
         time.sleep(5)
+
+        print(f'{i+1}/{len(stock_codes)} {code_name} analysis completed.')
     upload_recommendation_analysis(full_content, date_)

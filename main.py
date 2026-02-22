@@ -49,7 +49,7 @@ def upload_recommendation_analysis(content, date_):
                 time.sleep(5)
 
 def load_config():
-    load_dotenv(override=True)
+    # load_dotenv(override=True)
     config = {
         'agent_llm_provider': os.getenv('AGENT_LLM_PROVIDER'),
         'agent_llm_model': os.getenv('AGENT_LLM_MODEL'),

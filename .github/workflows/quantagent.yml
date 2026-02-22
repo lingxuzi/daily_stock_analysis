@@ -57,7 +57,7 @@ jobs:
           # AI 配置
           # ==========================================
           # Gemini AI（主选）
-          API_KEY: ${{ secrets.GITHUB_API_KEY }}
+          API_KEY: ${{ secrets.GH_API_KEY }}
           AGENT_LLM_PROVIDER: 'openai'
           AGENT_LLM_MODEL: 'openai/gpt-4o-mini'
           AGENT_LLM_TEMPERATURE: 0.0

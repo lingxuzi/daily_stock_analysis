@@ -95,7 +95,7 @@ if __name__ == "__main__":
             logger.error(f"获取推荐失败: {e}")
             time.sleep(5)
 
-    stock_codes = [(item['股票代码'], item['股票名称']) for item in recommendations][:20]
+    stock_codes = [(item['股票代码'], item['股票名称']) for item in recommendations][:10]
 
     
     full_content = f"# 🎯 {date_} 决策仪表盘\n\n"

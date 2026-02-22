@@ -55,11 +55,12 @@ def load_config():
         'agent_llm_model': os.getenv('AGENT_LLM_MODEL'),
         'agent_llm_temperature': float(os.getenv('AGENT_LLM_TEMPERATURE')),
         'agent_llm_base_url': os.getenv('AGENT_LLM_BASE_URL'),
+        'agent_api_key': os.getenv('AGENT_API_KEY').split(','),
         'graph_llm_provider': os.getenv('GRAPH_LLM_PROVIDER'),
         'graph_llm_model': os.getenv('GRAPH_LLM_MODEL'),
         'graph_llm_temperature': float(os.getenv('GRAPH_LLM_TEMPERATURE')),
         'graph_llm_base_url': os.getenv('GRAPH_LLM_BASE_URL'),
-        'api_key': os.getenv('API_KEY', '').split(',')
+        'graph_api_key': os.getenv('GRAPH_API_KEY').split(',')
     }
     print(config)
     return config
@@ -104,9 +105,6 @@ def create_stock_dashboard(stock_code, stock_name, stock_analysis_results):
 
 if __name__ == "__main__":
     config = load_config()
-
-    analyzer = WebTradingAnalyzer(config)
-
     for _ in range(3):
         try:
             recommendations, date_ = get_recommendations()
@@ -124,6 +122,7 @@ if __name__ == "__main__":
     end_date = datetime.now().date().strftime('%Y-%m-%d')
     start_date = (datetime.now().date() - timedelta(days=100)).strftime('%Y-%m-%d')
     for i, (code, code_name) in enumerate(stock_codes):
+        analyzer = WebTradingAnalyzer(config)
         results = analyzer.analyze_asset(
             code,
             start_date, end_date, "d")

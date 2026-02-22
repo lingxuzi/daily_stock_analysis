@@ -35,14 +35,14 @@ class TradingGraph:
             base_url=self.config.get("agent_llm_base_url", None),
             model=self.config.get("agent_llm_model", "gpt-4o-mini"),
             temperature=self.config.get("agent_llm_temperature", 0.1),
-            api_key=random.sample(self.config.get("api_key", []), 1)[0]
+            api_key=random.sample(self.config.get("agent_api_key", []), 1)[0]
         )
         self.graph_llm = self._create_llm(
             provider=self.config.get("graph_llm_provider", "openai"),
             base_url=self.config.get("graph_llm_base_url", None),
             model=self.config.get("graph_llm_model", "gpt-4o"),
             temperature=self.config.get("graph_llm_temperature", 0.1),
-            api_key=random.sample(self.config.get("api_key", []), 1)[0]
+            api_key=random.sample(self.config.get("graph_api_key", []), 1)[0]
         )
         self.toolkit = TechnicalTools()
 

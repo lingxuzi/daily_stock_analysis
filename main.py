@@ -108,5 +108,5 @@ if __name__ == "__main__":
         print(results)
         full_content += create_stock_dashboard(code, code_name, results['full_results'])
         full_content += "\n\n---\n\n"   
-        time.sleep(0.3)
+        time.sleep(5)
     upload_recommendation_analysis(full_content, date_)

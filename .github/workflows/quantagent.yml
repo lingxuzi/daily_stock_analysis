@@ -57,7 +57,7 @@ jobs:
           # AI 配置
           # ==========================================
           # Gemini AI（主选）
-          API_KEY: ${{ secrets.GH_API_KEY }}
+          AGENT_API_KEY: ${{ secrets.GH_API_KEY }}
           AGENT_LLM_PROVIDER: 'openai'
           AGENT_LLM_MODEL: 'openai/gpt-4.1'
           AGENT_LLM_TEMPERATURE: 0.0
@@ -66,6 +66,7 @@ jobs:
           GRAPH_LLM_MODEL: 'openai/gpt-4.1'
           GRAPH_LLM_TEMPERATURE: 0.0
           GRAPH_LLM_BASE_URL: 'https://models.github.ai/inference'
+          GRAPH_API_KEY: ${{ secrets.GH_API_KEY }}
           # AGENT_API_KEY: "89652169c1754f468131df6a9affa521.vCmjdXJWImY7OjLH,7d14b4c07a49473785766fa69b6feed1.OXZ2ZlvfKLzO4lla,fab8db5f2bb045ebb1ca18d315b8b222.tRjEGGexVNM4Otv9,62b2f2da2d014b45bbf55c1fb25eb939.fAAQPfBxSng1BX9v"
           # AGENT_LLM_PROVIDER: 'openai'
           # AGENT_LLM_MODEL: 'glm-z1-air'

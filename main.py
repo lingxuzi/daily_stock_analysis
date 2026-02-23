@@ -128,7 +128,7 @@ if __name__ == "__main__":
             start_date, end_date, "d")
         full_content += create_stock_dashboard(code, code_name, results['full_results'])
         full_content += "\n\n---\n\n"   
-        time.sleep(5)
+        time.sleep(10)
 
         print(f'{i+1}/{len(stock_codes)} {code_name} analysis completed.')
     upload_recommendation_analysis(full_content, date_)

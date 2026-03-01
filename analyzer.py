@@ -128,7 +128,7 @@ class WebTradingAnalyzer:
         return sorted(files)
 
     def run_analysis(
-        self, df: pd.DataFrame, asset_name: str, timeframe: str
+        self, df: pd.DataFrame, asset: str, timeframe: str
     ) -> Dict[str, Any]:
         """Run the trading analysis on the provided DataFrame."""
         try:
@@ -197,7 +197,7 @@ class WebTradingAnalyzer:
                 "analysis_results": None,
                 "messages": [],
                 "time_frame": display_timeframe,
-                "stock_name": asset_name,
+                "stock_name": asset,
                 "pattern_image": p_image["pattern_image"],
                 "pattern_image_path": p_image["pattern_image_path"],
                 "trend_image": t_image["trend_image"],
@@ -210,7 +210,7 @@ class WebTradingAnalyzer:
             return {
                 "success": True,
                 "final_state": final_state,
-                "asset_name": asset_name,
+                "asset_name": asset,
                 "timeframe": display_timeframe,
                 "data_length": len(df_slice),
             }
@@ -267,6 +267,7 @@ class WebTradingAnalyzer:
         technical_indicators = final_state.get("indicator_report", "")
         pattern_analysis = final_state.get("pattern_report", "")
         trend_analysis = final_state.get("trend_report", "")
+        sentiment_analysis = final_state.get("sentiment_report", "")
         final_decision_raw = final_state.get("final_trade_decision", "")
 
         # Extract chart data if available
@@ -294,6 +295,9 @@ class WebTradingAnalyzer:
                             "forecast_horizon", "N/A"
                         ),
                         "justification": decision_data.get("justification", "N/A"),
+                        "recommendation_strategy": decision_data.get(
+                            "recommendation_strategy", "N/A"
+                        ),
                     }
                 else:
                     # If no JSON found, return the raw text
@@ -310,6 +314,7 @@ class WebTradingAnalyzer:
             "technical_indicators": technical_indicators,
             "pattern_analysis": pattern_analysis,
             "trend_analysis": trend_analysis,
+            "sentiment_analysis": sentiment_analysis,
             "pattern_chart": pattern_chart,
             "trend_chart": trend_chart,
             "pattern_image_filename": pattern_image_filename,

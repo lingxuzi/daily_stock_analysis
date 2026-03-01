@@ -56,6 +56,11 @@ class IndicatorAgentState(TypedDict):
         "Final trend analysis summary, describing structure, directional bias, and technical observations for downstream agents",
     ]
 
+    sentiment_report: Annotated[
+        str,
+        "Final sentiment analysis summary, describing market sentiment and news sentiment for downstream agents",
+    ]
+
     # Final analysis and messaging context
     analysis_results: Annotated[str, "Computed result of the analysis or decision"]
     messages: Annotated[

@@ -10,6 +10,7 @@ from graph_util import TechnicalTools
 from indicator_agent import create_indicator_agent
 from pattern_agent import create_pattern_agent
 from trend_agent import create_trend_agent
+from news_agent import create_sentiment_agent
 
 
 class SetGraph:
@@ -29,10 +30,11 @@ class SetGraph:
         # Create analyst nodes
         agent_nodes = {}
         tool_nodes = {}
-        all_agents = ["indicator", "pattern", "trend"]
+        all_agents = ["sentiment", "indicator", "pattern", "trend"]
 
+        agent_nodes['sentiment'] = create_sentiment_agent(self.agent_llm, self.toolkit)
         # create nodes for indicator agent
-        agent_nodes["indicator"] = create_indicator_agent(self.graph_llm, self.toolkit)
+        agent_nodes["indicator"] = create_indicator_agent(self.agent_llm, self.toolkit)
         # tool_nodes["indicator"] = self.tool_nodes["indicator"]
 
         # create nodes for pattern agent
@@ -61,7 +63,7 @@ class SetGraph:
         graph.add_node("Decision Maker", decision_agent_node)
 
         # set start of graph
-        graph.add_edge(START, "Indicator Agent")
+        graph.add_edge(START, "Sentiment Agent")
 
         # add edges to graph
         for i, agent_type in enumerate(all_agents):

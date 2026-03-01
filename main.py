@@ -94,6 +94,7 @@ def create_stock_dashboard(stock_code, stock_name, stock_analysis_results):
         trend_image_url = 'data:image/png;base64,' + stock_analysis_results["trend_chart"]
     dashboard_content = f'## 分析结果 -> {stock_code} {stock_name}\n\n'
     dashboard_content += f"### 📌 核心结论: {decision_map.get(stock_analysis_results['final_decision']['decision'], '未知')}\n\n"
+    dashboard_content += f'**市场情绪分析**: {stock_analysis_results["sentiment_analysis"]}\n\n'
     dashboard_content += f'**技术指标分析**: {stock_analysis_results["technical_indicators"]}\n\n'
     dashboard_content += f'![image]({pattern_image_url})\n\n'
     dashboard_content += f'**K线形态分析**: {stock_analysis_results["pattern_analysis"]}\n\n'

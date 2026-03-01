@@ -14,6 +14,7 @@ def create_final_trade_decider(llm):
         indicator_report = state["indicator_report"]
         pattern_report = state["pattern_report"]
         trend_report = state["trend_report"]
+        sentiment_report = state['sentiment_report']
         time_frame = state["time_frame"]
         stock_name = state["stock_name"]
 
@@ -51,22 +52,35 @@ def create_final_trade_decider(llm):
             - Predict breakout **only when confluence exists with strong candles or indicator confirmation**.
             - **Do NOT assume breakout direction** from geometry alone.
 
+            ### 4. Sentiment Report:
+            - Analyze real‑time market sentiment and news impact within the current trading session.
+            - Focus only on sentiment that has immediate price impact:
+            - Abnormal order flow, volume spike, aggressive buying/selling.
+            - Clear news catalyst with directional consensus (no ambiguous news).
+            - Higher weight to sentiment that aligns with technical direction (indicators + pattern + trend).
+            - Ignore weak, conflicting, or lagging sentiment (e.g., old news, rumors, unconfirmed headlines).
+            - Negative sentiment is only trusted if confirmed by price breakdown / weak momentum / bearish pattern.
+            - Sentiment serves only as confirmation or divergence warning, NOT as a standalone signal.
+            - Do NOT predict sentiment-driven reversal unless supported by strong price action and indicators.
+
             ---
 
             ### ✅ Decision Strategy
 
-            1. Only act on **confirmed** signals — avoid emerging, speculative, or conflicting signals.
-            2. Prioritize decisions where **all three reports** (Indicator, Pattern, and Trend) **align in the same direction**.
-            3. Give more weight to:
-            - Recent strong momentum (e.g., MACD crossover, RSI breakout)
-            - Decisive price action (e.g., breakout candle, rejection wicks, support bounce)
+            1. Only act on confirmed signals — avoid emerging, speculative, or conflicting signals.
+            2. Prioritize decisions where all four reports (Indicator, Pattern, Trend, and Sentiment) align in the same direction.
+            3.Give more weight to:
+                -Recent strong momentum (e.g., MACD crossover, RSI breakout)
+                -Decisive price action (e.g., breakout candle, rejection wicks, support bounce)
+                -Confluence between technical signals and confirmed sentiment
             4. If reports disagree:
-            - Choose the direction with **stronger and more recent confirmation**
-            - Prefer **momentum-backed signals** over weak oscillator hints.
+                - Choose the direction with stronger and more recent confirmation
+                - Prefer momentum-backed signals over weak oscillator hints or unconfirmed sentiment
             5. ⚖️ If the market is in consolidation or reports are mixed:
-            - Default to the **dominant trendline slope** (e.g., SHORT in descending channel).
-            - Do not guess direction — choose the **more defensible** side.
-            6. Suggest a reasonable **risk-reward ratio** between **1.2 and 1.8**, based on current volatility and trend strength.
+                - Default to the dominant trendline slope (e.g., SHORT in descending channel).
+                - Do not guess direction — choose the more defensible side.
+                - Sentiment cannot override the dominant trend without clear technical confirmation.
+            6. Suggest a reasonable risk-reward ratio between 1.2 and 1.8, based on current volatility and trend strength.
             7. Give a recommendation strategy based on the decision, including buy price or sell price.
 
 
@@ -78,8 +92,8 @@ def create_final_trade_decider(llm):
             ```
             {{
             "decision": "<Long or Short>",
-            "justification": "<Concise, confirmed reasoning based on reports>",
-            "recommendation_strategy": "<Concise, recommended strategy based on the decision, including buy price or sell price>",
+            "justification": "<中文：1–3句话，基于共振信号的明确、简洁理由>",
+            "recommendation_strategy": "<中文：明确入场区间与方向逻辑>",
             "risk_reward_ratio": "<float between 1.2 and 1.8>",
             }}
 
@@ -92,6 +106,9 @@ def create_final_trade_decider(llm):
 
             **Trend Report**  
             {trend_report}
+
+            **Sentiment Report**  
+            {sentiment_report}
 
         """
 

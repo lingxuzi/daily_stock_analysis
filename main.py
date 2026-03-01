@@ -100,6 +100,7 @@ def create_stock_dashboard(stock_code, stock_name, stock_analysis_results):
     dashboard_content += f'![image]({trend_image_url})\n\n'
     dashboard_content += f'**趋势分析**: {stock_analysis_results["trend_analysis"]}\n\n'
     dashboard_content += f'**决策理由**: {stock_analysis_results["final_decision"]["justification"]}\n\n'
+    dashboard_content += f'**推荐策略**: {stock_analysis_results["final_decision"]["recommendation_strategy"]}\n\n'
 
     return dashboard_content
 

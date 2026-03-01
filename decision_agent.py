@@ -67,6 +67,7 @@ def create_final_trade_decider(llm):
             - Default to the **dominant trendline slope** (e.g., SHORT in descending channel).
             - Do not guess direction — choose the **more defensible** side.
             6. Suggest a reasonable **risk-reward ratio** between **1.2 and 1.8**, based on current volatility and trend strength.
+            7. Give a recommendation strategy based on the decision, including buy price or sell price.
 
 
             **语言规范**: justification 要求以中文输出
@@ -78,6 +79,7 @@ def create_final_trade_decider(llm):
             {{
             "decision": "<Long or Short>",
             "justification": "<Concise, confirmed reasoning based on reports>",
+            "recommendation_strategy": "<Concise, recommended strategy based on the decision, including buy price or sell price>",
             "risk_reward_ratio": "<float between 1.2 and 1.8>",
             }}
 

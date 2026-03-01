@@ -2,7 +2,7 @@ import os
 import httpx
 import logging
 import time
-import json
+import traceback
 from analyzer import WebTradingAnalyzer
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
@@ -123,17 +123,20 @@ if __name__ == "__main__":
     full_content = f"# 🎯 {date_} 决策仪表盘\n\n"
     end_date = datetime.now().date().strftime('%Y-%m-%d')
     start_date = (datetime.now().date() - timedelta(days=100)).strftime('%Y-%m-%d')
-    for i, (code, code_name) in enumerate(stock_codes):
-        for _ in range(3):
-            analyzer = WebTradingAnalyzer(config)
-            results = analyzer.analyze_asset(
-                code,
-                start_date, end_date, "d")
-            if 'full_results' in results:
-                full_content += create_stock_dashboard(code, code_name, results['full_results'])
-                full_content += "\n\n---\n\n"   
-                time.sleep(10)
-                break
+    try:
+        for i, (code, code_name) in enumerate(stock_codes):
+            for _ in range(3):
+                analyzer = WebTradingAnalyzer(config)
+                results = analyzer.analyze_asset(
+                    code,
+                    start_date, end_date, "d")
+                if 'full_results' in results:
+                    full_content += create_stock_dashboard(code, code_name, results['full_results'])
+                    full_content += "\n\n---\n\n"   
+                    time.sleep(10)
+                    break
 
-        print(f'{i+1}/{len(stock_codes)} {code_name} analysis completed.')
-    upload_recommendation_analysis(full_content, date_)
+            print(f'{i+1}/{len(stock_codes)} {code_name} analysis completed.')
+        upload_recommendation_analysis(full_content, date_)
+    except Exception as e:
+        logger.error(f"推荐分析失败: {traceback.format_exc()}")

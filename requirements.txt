@@ -14,3 +14,4 @@ openai==2.21.0
 pandas==3.0.1
 python-dotenv==1.2.1
 ta_lib==0.6.8
+fake_useragent

@@ -39,13 +39,13 @@ def upload_recommendation_analysis(content, date_):
                 response.raise_for_status()
                 response = response.json()
                 if response['success'] == 'ok':
-                    logger.info(f"推荐分析上传成功")
+                    print(f"推荐分析上传成功")
                     break
                 else:
-                    logger.error(f"推荐分析上传失败: {response['msg']}")
+                    print(f"推荐分析上传失败: {response['msg']}")
                     time.sleep(5)
             except Exception as e:
-                logger.error(f"推荐分析上传失败: {e}")
+                print(f"推荐分析上传失败: {e}")
                 time.sleep(5)
 
 def load_config():

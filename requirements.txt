@@ -10,8 +10,8 @@ langgraph==1.0.9
 matplotlib==3.10.8
 mplfinance
 numpy==1.26.4
-openai==2.21.0
-pandas==3.0.1
+openai
+pandas
 python-dotenv==1.2.1
 ta_lib==0.6.8
 fake_useragent

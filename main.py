@@ -135,6 +135,9 @@ if __name__ == "__main__":
                     full_content += "\n\n---\n\n"   
                     time.sleep(10)
                     break
+                else:
+                    logger.error(f"{code} 分析失败: {results.get('error', '未知错误')}")
+                    time.sleep(5)
 
             print(f'{i+1}/{len(stock_codes)} {code_name} analysis completed.')
         upload_recommendation_analysis(full_content, date_)

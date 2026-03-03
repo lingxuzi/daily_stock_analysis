@@ -84,14 +84,14 @@ def create_final_trade_decider(llm):
             7. Give a recommendation strategy based on the decision, including buy price or sell price.
 
 
-            **语言规范**: justification 要求以中文输出
+            **语言规范**: 要求以中文输出
 
             ---
             ### 🧠 Output Format in json(for system parsing)
 
             ```
             {{
-            "decision": "<Long or Short>",
+            "decision": "<看多 or 看空>",
             "justification": "<中文：1–3句话，基于共振信号的明确、简洁理由>",
             "recommendation_strategy": "<中文：明确入场区间与方向逻辑>",
             "risk_reward_ratio": "<float between 1.2 and 1.8>",
@@ -114,6 +114,9 @@ def create_final_trade_decider(llm):
 
         # --- LLM call for decision ---
         response = llm.invoke(prompt)
+
+        if 'think' in response.content:
+            response.content = response.content.split('</think>')[1]
 
         return {
             "final_trade_decision": response.content,

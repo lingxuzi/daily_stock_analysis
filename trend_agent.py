@@ -156,6 +156,9 @@ def create_trend_agent(tool_llm, graph_llm, toolkit):
             # If no image was generated, fall back to reasoning with messages
             final_response = invoke_with_retry(chain.invoke, messages)
 
+        if 'think' in final_response.content:
+            final_response.content = final_response.content.split('</think>')[1]
+
         return {
             "messages": messages + [final_response],
             "trend_report": final_response.content,

@@ -62,6 +62,9 @@ def create_indicator_agent(llm, toolkit):
         """
         response = llm.invoke(prompt)
 
+        if 'think' in response.content:
+            response.content = response.content.split('</think>')[1]
+
         return {
             "messages": messages,
             "indicator_report": response.content

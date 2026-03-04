@@ -69,16 +69,21 @@ def upload(file):
     with httpx.Client() as client:
         with open(file, "rb") as f:
             files = {"file": f}
-            response = client.post("https://img.remit.ee/api/upload", files=files, headers={
-                'Origin': 'https://img.remit.ee',
-                'referer': 'https://img.remit.ee'
-            }, timeout=60)
-            response.raise_for_status()
-            data = response.json()
-            if data["success"]:
-                return 'https://img.remit.ee' + data["url"]
-            else:
-                return None
+            for i in range(3):
+                try:
+                    response = client.post("https://img.remit.ee/api/upload", files=files, headers={
+                        'Origin': 'https://img.remit.ee',
+                        'referer': 'https://img.remit.ee'
+                    }, timeout=60)
+                    response.raise_for_status()
+                    data = response.json()
+                    if data["success"]:
+                        return 'https://img.remit.ee' + data["url"]
+                except Exception as e:
+                    print(f"图片上传失败: {e}")
+                finally:
+                    time.sleep(5)
+            
 
 def create_stock_dashboard(stock_code, stock_name, stock_analysis_results):
     decision_map = {

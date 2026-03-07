@@ -108,6 +108,8 @@ def create_stock_dashboard(stock_code, stock_name, stock_analysis_results):
     dashboard_content += f'**决策理由**: {stock_analysis_results["final_decision"]["justification"]}\n\n'
     dashboard_content += f'**推荐策略**: {stock_analysis_results["final_decision"]["recommendation_strategy"]}\n\n'
 
+    print(dashboard_content)
+
     return dashboard_content
 
 if __name__ == "__main__":
@@ -145,6 +147,7 @@ if __name__ == "__main__":
                     time.sleep(5)
 
             print(f'{i+1}/{len(stock_codes)} {code_name} analysis completed.')
+        print(full_content)
         upload_recommendation_analysis(full_content, date_)
     except Exception as e:
         logger.error(f"推荐分析失败: {traceback.format_exc()}")
